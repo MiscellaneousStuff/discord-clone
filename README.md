@@ -5,5 +5,6 @@ Discord clone written in Node.js
 
 ## TODO
 
-- [ ] Add basic guilds
-- [ ] Add text channel to guild
+- [x] Add basic guilds
+- [x] Add text channel to guild
+- [ ] Add screen sharing
