@@ -9,8 +9,11 @@ const Message = props => {
   const { id, text, time, username } = props;
   console.log("PROPS:", props);
   return (
-    <div>
-      <div>{username}</div>
+    <div className="message">
+      <div className="message-top">
+        <div className="message-username">{username}</div>
+        <div>{time}</div>
+      </div>
       <div>{text}</div>
     </div>
   )
@@ -49,12 +52,36 @@ const Messages = ({socket}) => {
   console.log("messages:", messages)
   // {messages.map((message, i) => <Message key={i} message={message}/>)}
   return (
-    <div>
+    <div className="messages">
       {[...Object.values(messages)]
         .map((message, i) => (
           <Message key={i} {...message} />
         ))
       }
+    </div>
+  )
+};
+
+const Chat = ({socket}) => {
+  const [message, setMessage] = useState("");
+
+  const handleChange = ev => {
+    setMessage(ev.target.value);
+  };
+
+  const handleKeyDown = ev => {
+    if (ev.key === "Enter") {
+      console.log("Send message");
+    }
+  };
+
+  return (
+    <div className="chat">
+      <input
+        type="text"
+        value={message}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown} />
     </div>
   )
 };
@@ -72,7 +99,10 @@ const App = () => {
   return (
     <div className="app">
       {socket ? (
-        <Messages socket={socket}/>
+        <div className="app-inner">
+          <Messages socket={socket} />
+          <Chat socket={socket} />
+        </div>
       ) : (
         <div>Not connected to text channel!</div> 
       )}

@@ -1,5 +1,38 @@
 .app {
-  background-color: #b9bbbe;
+  background-color: #b9bbbe;  
   width: 100%;
   height: 100%;
+}
+
+.app-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.chat {
+  padding: 1rem;
+}
+
+.message {
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.message:hover {
+  background-color: #a1a3a6;
+}
+
+.message-top {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.5rem;
+}
+
+.message-username {
+  margin-right: 0.5rem;
 }
