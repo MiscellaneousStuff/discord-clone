@@ -46,6 +46,9 @@ const userJoin = (id, username, channel) => {
 function getChannelUsers(channel) {
     return users.filter(user => user.channel === channel);
 }
+function getCurrentUser(id) {
+    return users.find(user => user.id === id);
+}
 
 // Setup Chat Application
 io.on("connection", socket => {
@@ -66,8 +69,8 @@ io.on("connection", socket => {
                 formatMessage(botName, `${user.username} has joined the channel!`)
             );
         
-        // Send users and room info
-        io.to(user.room).emit('channelUsers', {
+        // Send users and channel info
+        io.to(user.channel).emit('channelUsers', {
             channel: user.channel,
             users: getChannelUsers(user.channel)
         });
@@ -76,7 +79,7 @@ io.on("connection", socket => {
     // Listen for chatMessage
     socket.on('chatMessage', msg => {
         const user = getCurrentUser(socket.id);
-        io.to(user.room).emit('message', formatMessage(user.username, msg));
+        io.to(user.channel).emit('message', formatMessage(user.username, msg));
     });
 });
 

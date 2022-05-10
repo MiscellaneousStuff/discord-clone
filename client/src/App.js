@@ -71,7 +71,8 @@ const Chat = ({socket}) => {
 
   const handleKeyDown = ev => {
     if (ev.key === "Enter") {
-      console.log("Send message");
+      socket.emit("chatMessage", message);
+      setMessage("");
     }
   };
 
