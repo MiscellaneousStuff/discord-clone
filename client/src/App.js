@@ -7,7 +7,7 @@ const testMessages = [
     "msg": "hi"
   },
   {
-    "author": "Bob",
+    "author": "Jim",
     "msg": "hello"
   },
   {
