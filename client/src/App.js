@@ -1,38 +1,81 @@
-import { useState } from 'react';
-import logo from './logo.svg';
+// Module Imports
+import { useEffect, useState } from 'react';
+import io from 'socket.io-client';
+
+// CSS Imports
 import './App.css';
 
 const Message = props => {
-  console.log("PROPS:", props)
-  const { message } = props;
-  const { author, msg } = message;
+  const { id, text, time, username } = props;
+  console.log("PROPS:", props);
   return (
     <div>
-      <div>
-        {author}
-      </div>
-      <div>
-        {msg}
-      </div>
+      <div>{username}</div>
+      <div>{text}</div>
     </div>
   )
 }
 
-const Messages = props => {
-  const { messages } = props;
-  console.log(messages)
+const Messages = ({socket}) => {
+  const [messages, setMessages] = useState([]);
+  
+  useEffect(() => {
+    const msgListener = msg => {
+      setMessages((prevMsgs) => {
+        const newMsgs = {...prevMsgs};
+        newMsgs[msg.id] = msg;
+        console.log("new msgs:", newMsgs);
+        return newMsgs;
+      })
+    };
+    const delMsgListener = msgId => {
+      setMessages((prevMsgs) => {
+        const newMsgs = {...prevMsgs};
+        delete newMsgs[msgId];
+        return newMsgs;
+      });
+    };
+    
+    socket.on("message", msgListener);
+    socket.on("deleteMessage", delMsgListener);
+    socket.emit("getMessages");
+
+    return () => {
+      socket.off("message", msgListener);
+      socket.off("deleteMessage", delMsgListener);
+    };
+  }, [socket]);
+
+  console.log("messages:", messages)
+  // {messages.map((message, i) => <Message key={i} message={message}/>)}
   return (
     <div>
-      {messages.map((message, i) => <Message key={i} message={message}/>)}
+      {[...Object.values(messages)]
+        .map((message, i) => (
+          <Message key={i} {...message} />
+        ))
+      }
     </div>
   )
 };
 
 const App = () => {
-  const [messages, setMessages] = useState([]);
+  const [socket, setSocket] = useState(null);
+
+  useEffect(() => {
+    const newSocket = io(`http://${window.location.hostname}:5000`);
+    setSocket(newSocket);
+    newSocket.emit("joinChannel", {username: "geez", channel: "text"});
+    return () => newSocket.close();
+  }, [setSocket]);
+
   return (
     <div className="app">
-      <Messages messages={messages} />
+      {socket ? (
+        <Messages socket={socket}/>
+      ) : (
+        <div>Not connected to text channel!</div> 
+      )}
     </div>
   );
 }
