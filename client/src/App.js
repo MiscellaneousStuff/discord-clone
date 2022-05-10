@@ -87,9 +87,22 @@ const Chat = ({socket}) => {
   )
 };
 
+const ScreenShare = props => {
+  return (
+    <div className="screen-share">
+      <div>ScreenShare</div>
+      <video autoplay></video>
+    </div>
+  )
+};
+
 const App = () => {
   const [socket, setSocket] = useState(null);
 
+  // WebRTC Initialization
+  
+
+  // Socket.IO Initialization
   useEffect(() => {
     const newSocket = io(`http://${window.location.hostname}:5000`);
     setSocket(newSocket);
@@ -101,6 +114,7 @@ const App = () => {
     <div className="app">
       {socket ? (
         <div className="app-inner">
+          <ScreenShare />
           <Messages socket={socket} />
           <Chat socket={socket} />
         </div>

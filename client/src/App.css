@@ -10,10 +10,16 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: stretch;
 }
 
 .chat {
   padding: 1rem;
+}
+
+.messages {
+  flex: 1 1 auto;
+  overflow: auto;
 }
 
 .message {
@@ -35,4 +41,9 @@
 
 .message-username {
   margin-right: 0.5rem;
+}
+
+.screen-share {
+  height: 480px;
+  width: 640px;
 }

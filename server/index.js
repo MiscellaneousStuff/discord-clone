@@ -49,6 +49,12 @@ function getChannelUsers(channel) {
 function getCurrentUser(id) {
     return users.find(user => user.id === id);
 }
+function userLeave(id) {
+    const index = users.findIndex(user => user.id === id);
+    if (index !== -1) {
+        return users.splice(index, 1)[0];
+    }
+}
 
 // Setup Chat Application
 io.on("connection", socket => {
@@ -80,6 +86,24 @@ io.on("connection", socket => {
     socket.on('chatMessage', msg => {
         const user = getCurrentUser(socket.id);
         io.to(user.channel).emit('message', formatMessage(user.username, msg));
+    });
+
+    // Runs when client disconnects
+    socket.on('disconnect', () => {
+        const user = userLeave(socket.id);
+
+        if (user) {
+            io.to(user.channel).emit(
+                'message',
+                formatMessage(botName, `${user.username} has left the chat`)
+            );
+
+            // Send users and channel info
+            io.to(user.channel).emit('roomUsers', {
+                channel: user.channel,
+                users: getChannelUsers(user.channel)
+            });
+        }
     });
 });
 
