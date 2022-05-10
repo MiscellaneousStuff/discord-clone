@@ -1,22 +1,43 @@
 import logo from './logo.svg';
 import './App.css';
 
-const testMessages = ["hi", "hello!", "so, how are ya ?"];
+const testMessages = [
+  {
+    "author": "Bob",
+    "msg": "hi"
+  },
+  {
+    "author": "Bob",
+    "msg": "hello"
+  },
+  {
+    "author": "Bob",
+    "msg": "so, what have you been up to ?"
+  },
+];
 
 const Message = props => {
+  console.log("PROPS:", props)
   const { message } = props;
+  const { author, msg } = message;
   return (
     <div>
-      {message}
+      <div>
+        {author}
+      </div>
+      <div>
+        {msg}
+      </div>
     </div>
   )
 }
 
 const Messages = props => {
   const { messages } = props;
+  console.log(messages)
   return (
     <div>
-      {messages.map((message, i) => <Message message={message}/>)}
+      {messages.map((message, i) => <Message key={i} message={message}/>)}
     </div>
   )
 };
