@@ -1,20 +1,6 @@
+import { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
-
-const testMessages = [
-  {
-    "author": "Bob",
-    "msg": "hi"
-  },
-  {
-    "author": "Jim",
-    "msg": "hello"
-  },
-  {
-    "author": "Bob",
-    "msg": "so, what have you been up to ?"
-  },
-];
 
 const Message = props => {
   console.log("PROPS:", props)
@@ -43,9 +29,10 @@ const Messages = props => {
 };
 
 const App = () => {
+  const [messages, setMessages] = useState([]);
   return (
     <div className="app">
-      <Messages messages={testMessages} />
+      <Messages messages={messages} />
     </div>
   );
 }
